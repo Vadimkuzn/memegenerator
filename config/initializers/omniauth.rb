@@ -1,3 +1,3 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
- provider :coub, "8479dbfc74549a1b8f01f87519295a3032b02200e2027449898b8b2ab8cf4630", "d38cda36fb391a7ca094ec27fdca44ca949523aa7dbadf2cac8273084d4d1916", scope: "logged_in,create,like", callback_url: 'http://localhost:3000/auth/coub/callback', redirect_uri: 'http://localhost:3000/auth/coub/callback'
+ provider :coub, "8d210ce217dcfa2ead2e1a7539ca83634d80eb8237753016a23956cac715b35a", "74bba6156a7d01ca4f66892d9a7b45d2ee5d30e86f931cadc963b611c7a9389b", scope: "logged_in,create,like"
 end
