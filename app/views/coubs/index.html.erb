@@ -1,5 +1,15 @@
 <% if current_user %>
-  <p>You’re logged in as <%= current_user.name %>. <%= link_to "Log out", logout_path, method: :delete %></p>
+<b>
+  <p>current_user.name: <%= current_user.name %></p>
+  <p>current_user.id: <%= current_user.id %></p>
+  <p>current_user.provider: <%= current_user.provider %></p>
+  <p>current_user.uid: <%= current_user.uid %></p>
+  <p>current_user.auth_token: <%= current_user.auth_token %></p>
+  <p>current_user.created_at: <%= current_user.created_at %></p>
+  <p>current_user.updated_at: <%= current_user.updated_at %></p>
+</b>
+  <p><%= link_to "Log out", logout_path, method: :delete %></p>
+
   <%= form_for Coub.new, url: {action: "create"} do |f| %>
     <%= f.text_field :text1, placeholder: "To me", maxlength: 30, size: 50 %><br />
     <%= f.text_field :text2, placeholder: "Your Coub API", maxlength: 30, size: 50 %><br />
@@ -8,7 +18,7 @@
     <%= f.text_field :tags, placeholder: "first tag, second tag" %><br />
     <%= f.submit "Create Coub" %>
   <% end %>
-<% else %>
-  <p>Please <a href="/auth/coub">log in via Coub</a>.</p>
-<% end %>
 
+<% else %>
+ <p>Please <a href="/auth/coub">log in via Coub</a>.</p>
+<% end %>
