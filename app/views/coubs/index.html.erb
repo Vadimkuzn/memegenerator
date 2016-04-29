@@ -64,11 +64,15 @@
    <% current_channel_id = current_channel["id"] %>
   <th><%= current_channel_id %></th>
  </tr>
+
+<!--
  <tr>
   <th>likes by channel</th>
   <% r = api.get("likes/by_channel", channel_id: current_channel_id) %>
   <th><%= render plain: r.inspect %></th>
  </tr>
+-->
+
 </table>
 
 <br>
@@ -98,22 +102,33 @@
 <H1><p>Coub Likes List:</p></H1>
 <% ar = api.get("action_subjects_data/coub_likes_list", id: cbinfo["id"], page: 1) %>
 
+<% chids = [] %>
+
 <table align=center, border=1, border-spacing=1>
  <tr>
   <th>Title</th>
-  <th>ID</th>
+  <th>Channel ID</th>
  </tr>
 
  <% ar["channels"].each do |ch| %>
   <tr>
    <td><%= ch["title"] %></td>
    <td><%= ch["id"] %></td>
+   <% chids << ch["id"] %>
   </tr>
  <% end %>
 </table>
 
-</b>
+<H1><p>Does Current User Like?<br>User Name: <%= muser["name"] %><br>User ID: <%= muser["id"] %><br>User Channel: <%= current_channel_id %></p></H1>
 
+<% incl = chids.include? current_channel_id %>
+<% if incl %>
+<H1>Result: Yes</H1>
+<% else %>
+<H1>Result:No</H1>
+<% end %>
+
+</b>
 
   <p><%= link_to "Log out", logout_path, method: :delete %></p>
 
