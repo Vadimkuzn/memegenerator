@@ -1,13 +1,120 @@
 <% if current_user %>
-<b>
-  <p>current_user.name: <%= current_user.name %></p>
-  <p>current_user.id: <%= current_user.id %></p>
-  <p>current_user.provider: <%= current_user.provider %></p>
-  <p>current_user.uid: <%= current_user.uid %></p>
-  <p>current_user.auth_token: <%= current_user.auth_token %></p>
-  <p>current_user.created_at: <%= current_user.created_at %></p>
-  <p>current_user.updated_at: <%= current_user.updated_at %></p>
+
+<H1>Current User info:</H1>
+<br>
+
+<% def get_shortcode(uri) %>
+<%  arr = uri.scan(/\w+/) %>
+<%  arr[-1] %>
+<% end %>
+
+<% api = CoubApi::Client.new(current_user.auth_token) %>
+<% muser = api.get('users/me') %>
+
+<table align=center, border=1, border-spacing=1>
+
+ <tr>
+  <th>current_user.name</th>
+  <th><%= current_user.name %></th>
+ </tr>
+ <tr>
+  <th>current_user.id</th>
+  <th><%= current_user.id %></th>
+ </tr>
+ <tr>
+  <th>current_user.provider</th>
+  <th><%= current_user.provider %></th>
+ </tr>
+ <tr>
+  <th>current_user.uid</th>
+  <th><%= current_user.uid %></th>
+ </tr>
+ <tr>
+  <th>current_user.auth_token</th>
+  <th><%= current_user.auth_token %></th>
+ </tr>
+ <tr>
+  <th>current_user.created_at</th>
+  <th><%= current_user.created_at %></th>
+ </tr>
+ <tr>
+  <th>current_user.updated_at</th>
+  <th><%= current_user.updated_at %></th>
+ </tr>
+
+</table>
+
+
+<br>
+<br>
+
+<table align=center, border=1, border-spacing=1>
+
+ <tr>
+  <th>id</th>
+  <th><%= muser["id"] %></th>
+ </tr>
+ <tr>
+  <th>permalink</th>
+  <th><%= muser["permalink"] %></th>
+ </tr>
+ <tr>
+  <th>current_channel</th>
+   <% current_channel = muser["current_channel"] %>
+   <% current_channel_id = current_channel["id"] %>
+  <th><%= current_channel_id %></th>
+ </tr>
+ <tr>
+  <th>likes by channel</th>
+  <% r = api.get("likes/by_channel", channel_id: current_channel_id) %>
+  <th><%= render plain: r.inspect %></th>
+ </tr>
+</table>
+
+<br>
+
+<% url = "https://coub.com/view/b9t15" %>
+
+<% shortcode = get_shortcode(url) %>
+<% cbinfo = api.get("coubs/#{shortcode}") %>
+
+<H1>URL to check:</H1>
+<table align=center, border=1, border-spacing=1>
+ <tr>
+  <th>URL</th>
+  <th><%= p url %></th>
+ </tr>
+ <tr>
+  <th>Shortcode</th>
+  <th><%= p shortcode %></th>
+ </tr>
+ <tr>
+  <th>Coub ID from Shortcode</th>
+  <th><%= p cbinfo["id"] %></th>
+ </tr>
+</table>
+
+
+<H1><p>Coub Likes List:</p></H1>
+<% ar = api.get("action_subjects_data/coub_likes_list", id: cbinfo["id"], page: 1) %>
+
+<table align=center, border=1, border-spacing=1>
+ <tr>
+  <th>Title</th>
+  <th>ID</th>
+ </tr>
+
+ <% ar["channels"].each do |ch| %>
+  <tr>
+   <td><%= ch["title"] %></td>
+   <td><%= ch["id"] %></td>
+  </tr>
+ <% end %>
+</table>
+
 </b>
+
+
   <p><%= link_to "Log out", logout_path, method: :delete %></p>
 
   <%= form_for Coub.new, url: {action: "create"} do |f| %>

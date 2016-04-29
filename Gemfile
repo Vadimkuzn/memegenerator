@@ -17,7 +17,7 @@ gem 'coffee-script-source', '1.8.0'
 
 gem 'omniauth', '1.2.2'
 gem 'omniauth-oauth2', '1.3.1'
-
+gem 'coub_api'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
