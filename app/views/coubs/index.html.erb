@@ -1,132 +1,128 @@
+<% require 'v_coub_lib' %>
+
+<% if false %>
+<% url = "https://coub.com/view/b9t15" %>
+<% end %>
+
+<% url = "https://coub.com/view/qg6l668" %>
+
+
 <% if current_user %>
 
-<H1>Current User info:</H1>
-<br>
+ <% vclib              = VCoubLib.new %>
+ <% api                = vclib.get_current_user_api() %>
+ <% muser              = vclib.get_current_user_info() %>
+ <% shortcode          = vclib.get_shortcode(url) %>
+ <% cbinfo             = vclib.get_coub_id(url) %>
+ <% current_channel_id = vclib.get_current_user_channel_id() %>
 
-<% def get_shortcode(uri) %>
-<%  arr = uri.scan(/\w+/) %>
-<%  arr[-1] %>
-<% end %>
+ <H1>Current User info:</H1>
+ <br>
 
-<% api = CoubApi::Client.new(current_user.auth_token) %>
-<% muser = api.get('users/me') %>
+ <table align=center, border=1, border-spacing=1>
 
-<table align=center, border=1, border-spacing=1>
-
- <tr>
-  <th>current_user.name</th>
-  <th><%= current_user.name %></th>
- </tr>
- <tr>
-  <th>current_user.id</th>
-  <th><%= current_user.id %></th>
- </tr>
- <tr>
-  <th>current_user.provider</th>
-  <th><%= current_user.provider %></th>
- </tr>
- <tr>
-  <th>current_user.uid</th>
-  <th><%= current_user.uid %></th>
- </tr>
- <tr>
-  <th>current_user.auth_token</th>
-  <th><%= current_user.auth_token %></th>
- </tr>
- <tr>
-  <th>current_user.created_at</th>
-  <th><%= current_user.created_at %></th>
- </tr>
- <tr>
-  <th>current_user.updated_at</th>
-  <th><%= current_user.updated_at %></th>
- </tr>
-
-</table>
-
-
-<br>
-<br>
-
-<table align=center, border=1, border-spacing=1>
-
- <tr>
-  <th>id</th>
-  <th><%= muser["id"] %></th>
- </tr>
- <tr>
-  <th>permalink</th>
-  <th><%= muser["permalink"] %></th>
- </tr>
- <tr>
-  <th>current_channel</th>
-   <% current_channel = muser["current_channel"] %>
-   <% current_channel_id = current_channel["id"] %>
-  <th><%= current_channel_id %></th>
- </tr>
-
-<!--
- <tr>
-  <th>likes by channel</th>
-  <% r = api.get("likes/by_channel", channel_id: current_channel_id) %>
-  <th><%= render plain: r.inspect %></th>
- </tr>
--->
-
-</table>
-
-<br>
-
-<% url = "https://coub.com/view/b9t15" %>
-
-<% shortcode = get_shortcode(url) %>
-<% cbinfo = api.get("coubs/#{shortcode}") %>
-
-<H1>URL to check:</H1>
-<table align=center, border=1, border-spacing=1>
- <tr>
-  <th>URL</th>
-  <th><%= p url %></th>
- </tr>
- <tr>
-  <th>Shortcode</th>
-  <th><%= p shortcode %></th>
- </tr>
- <tr>
-  <th>Coub ID from Shortcode</th>
-  <th><%= p cbinfo["id"] %></th>
- </tr>
-</table>
-
-
-<H1><p>Coub Likes List:</p></H1>
-<% ar = api.get("action_subjects_data/coub_likes_list", id: cbinfo["id"], page: 1) %>
-
-<% chids = [] %>
-
-<table align=center, border=1, border-spacing=1>
- <tr>
-  <th>Title</th>
-  <th>Channel ID</th>
- </tr>
-
- <% ar["channels"].each do |ch| %>
   <tr>
-   <td><%= ch["title"] %></td>
-   <td><%= ch["id"] %></td>
-   <% chids << ch["id"] %>
+   <th>current_user.name</th>
+   <th><%= current_user.name %></th>
   </tr>
+  <tr>
+   <th>current_user.id</th>
+   <th><%= current_user.id %></th>
+  </tr>
+  <tr>
+   <th>current_user.provider</th>
+   <th><%= current_user.provider %></th>
+  </tr>
+  <tr>
+   <th>current_user.uid</th>
+   <th><%= current_user.uid %></th>
+  </tr>
+  <tr>
+   <th>current_user.auth_token</th>
+   <th><%= current_user.auth_token %></th>
+  </tr>
+  <tr>
+   <th>current_user.created_at</th>
+   <th><%= current_user.created_at %></th>
+  </tr>
+  <tr>
+   <th>current_user.updated_at</th>
+   <th><%= current_user.updated_at %></th>
+  </tr>
+
+ </table>
+
+
+ <br>
+ <br>
+
+ <table align=center, border=1, border-spacing=1>
+
+  <tr>
+   <th>id</th>
+   <th><%= muser["id"] %></th>
+  </tr>
+  <tr>
+   <th>permalink</th>
+   <th><%= muser["permalink"] %></th>
+  </tr>
+  <tr>
+   <th>current_channel</th>
+   <th><%= current_channel_id %></th>
+  </tr>
+
+ </table>
+
+ <br>
+
+
+ <H1>URL to check:</H1>
+ <table align=center, border=1, border-spacing=1>
+  <tr>
+   <th>URL</th>
+   <th><a href="<%= p url %>"><%= p url %></a></th>
+  </tr>
+  <tr>
+   <th>Shortcode</th>
+   <th><%= p shortcode %></th>
+  </tr>
+  <tr>
+   <th>Coub ID from Shortcode</th>
+   <th><%= p cbinfo %></th>
+  </tr>
+ </table>
+
+
+ <H1><p>Coub Likes List:</p></H1>
+ <% likers = vclib.get_likers_list(url) %>
+ <table align=center, border=1, border-spacing=1>
+ <% likers.each do |like| %>
+ <tr>
+ <th><a href = "<%= p like[1] %>" alt = "<%= p like[0] %>"><%= p like[0] %></a></th>
+ </tr>
  <% end %>
-</table>
+ </table>
+ <br>
 
-<H1><p>Does Current User Like?<br>User Name: <%= muser["name"] %><br>User ID: <%= muser["id"] %><br>User Channel: <%= current_channel_id %></p></H1>
+ <H1><p>Coub Followers List:</p></H1>
+ <% likers = vclib.get_followers_list(url) %>
+ <table align=center, border=1, border-spacing=1>
+ <% likers.each do |like| %>
+ <tr>
+ <th><a href = "<%= p like[1] %>" alt = "<%= p like[0] %>"><%= p like[0] %></a></th>
+ </tr>
+ <% end %>
+ </table>
+ <br>
 
-<% incl = chids.include? current_channel_id %>
-<% if incl %>
-<H1>Result: Yes</H1>
-<% else %>
-<H1>Result:No</H1>
-<% end %>
+
+ <H1><p>Does Current User Like?<br>User Name: <%= muser["name"] %><br>User ID: <%= muser["id"] %><br>User Channel: <%= current_channel_id %></p></H1>
+ <H1><%= p vclib.does_like?(url) %></H1>
+
+ <H1><p>Does Current User Follow?<br>User Name: <%= muser["name"] %><br>User ID: <%= muser["id"] %><br>User Channel: <%= current_channel_id %></p></H1>
+ <H1><%= p vclib.does_follow?(url) %></H1>
+
+ <br>
 
 </b>
 
