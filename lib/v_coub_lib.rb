@@ -45,7 +45,7 @@ class VCoubLib
    ar['channels'].each do |ch|
     chids << ch['id']
    end
-   chids.include? api.get('users/me')['current_channel']['id']
+   chids.include? get_current_user_channel_id()
   else
    false
   end
@@ -137,7 +137,7 @@ class VCoubLib
   if $current_user
    api = get_current_user_api()
    begin
-    ar  = api.get('action_subjects_data/followings_list', id: get_coub_id(url), page: 1)
+    ar  = api.get('action_subjects_data/followers_list', id: get_coub_id(url), page: 1)
    rescue
     nil
     return
@@ -188,7 +188,7 @@ class VCoubLib
   if $current_user
    api = get_current_user_api()
    begin
-    ar  = api.get('action_subjects_data/followings_list', id: get_coub_id(url), page: 1)
+    ar  = api.get('action_subjects_data/followers_list', id: get_coub_id(url), page: 1)
    rescue
     false
     return
@@ -197,7 +197,8 @@ class VCoubLib
    ar['channels'].each do |ch|
     chids << ch['id']
    end
-   chids.include? api.get('users/me')['current_channel']['id']
+#   chids.include? api.get('users/me')['current_channel']['id']
+   chids.include? get_current_user_channel_id()
   else
    false
   end

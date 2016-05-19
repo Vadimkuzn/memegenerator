@@ -93,7 +93,7 @@
  </table>
 
 
- <H1><p>Coub Likes List:</p></H1>
+ <H1><p>Coub Likers List:</p></H1>
  <% likers = vclib.get_likers_list(url) %>
  <table align=center, border=1, border-spacing=1>
  <% likers.each do |like| %>
@@ -106,6 +106,9 @@
 
  <H1><p>Coub Followers List:</p></H1>
  <% likers = vclib.get_followers_list(url) %>
+
+ <%= render plain: likers.inspect %>
+
  <table align=center, border=1, border-spacing=1>
  <% likers.each do |like| %>
  <tr>
